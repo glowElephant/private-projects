@@ -1,0 +1,66 @@
+name: Sync Private READMEs
+
+on:
+  schedule:
+    - cron: '0 0 * * 1'  # 매주 월요일 00:00 UTC (한국 09:00)
+  workflow_dispatch:       # 수동 실행 버튼
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Private 저장소에서 README 가져오기
+      # 새 저장소 추가 시: repo, folder 쌍을 추가하면 됩니다
+      - name: Fetch READMEs from private repos
+        env:
+          GH_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
+        run: |
+          # 자동 동기화 대상 (private GitHub 저장소만)
+          # 회사 프로젝트(vts-visualizer, coex-ar-navigation, gameci-hub)는 수동 관리
+          declare -A REPOS=(
+            ["Bom_Factory"]="bom-factory"
+            ["graph-RAG-study"]="graph-rag-study"
+          )
+
+          CHANGED=0
+          for repo in "${!REPOS[@]}"; do
+            folder="${REPOS[$repo]}"
+            echo "--- $repo → $folder ---"
+
+            # GitHub API로 README 가져오기
+            CONTENT=$(gh api "repos/glowElephant/$repo/readme" --jq '.content' 2>/dev/null | base64 -d 2>/dev/null)
+
+            if [ -n "$CONTENT" ]; then
+              mkdir -p "$folder"
+              # 기존 내용과 비교
+              if [ -f "$folder/README.md" ]; then
+                EXISTING=$(cat "$folder/README.md")
+                if [ "$CONTENT" != "$EXISTING" ]; then
+                  echo "$CONTENT" > "$folder/README.md"
+                  echo "✓ $folder/README.md 업데이트됨"
+                  CHANGED=1
+                else
+                  echo "- 변경 없음"
+                fi
+              else
+                echo "$CONTENT" > "$folder/README.md"
+                echo "✓ $folder/README.md 신규 생성"
+                CHANGED=1
+              fi
+            else
+              echo "✗ README를 가져올 수 없음 (스킵)"
+            fi
+          done
+
+          echo "CHANGED=$CHANGED" >> $GITHUB_ENV
+
+      - name: Commit & Push
+        if: env.CHANGED == '1'
+        run: |
+          git config user.name "admin"
+          git config user.email "gksdk1029@gmail.com"
+          git add -A
+          git commit -m "README 자동 동기화 $(date +%Y-%m-%d)"
+          git push
