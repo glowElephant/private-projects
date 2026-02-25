@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
 
       # Private 저장소에서 README 가져오기
       # 새 저장소 추가 시: repo, folder 쌍을 추가하면 됩니다
