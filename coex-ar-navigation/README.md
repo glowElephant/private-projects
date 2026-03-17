@@ -9,7 +9,9 @@ COEX 스타필드몰 실내 AR 길찾기 Unity 클라이언트.
 
 ## 데모 영상
 
-https://github.com/glowElephant/private-projects/raw/main/coex-ar-navigation/media/ar-navigation-demo.mp4
+</div>
+
+<video src="https://github.com/glowElephant/private-projects/raw/main/coex-ar-navigation/media/ar-navigation-demo.mp4" controls width="100%"></video>
 
 > COEX 스타필드몰에서 실제 AR 경로 안내 동작 영상
 
