@@ -4,6 +4,17 @@ COEX 스타필드몰 실내 AR 길찾기 Unity 클라이언트.
 
 > 기존 12개월 이상 소요 예상 프로젝트를 AI 활용하여 **3개월 내 완료**
 
+
+---
+
+## 데모 영상
+
+https://github.com/glowElephant/private-projects/raw/main/coex-ar-navigation/media/ar-navigation-demo.mp4
+
+> COEX 스타필드몰에서 실제 AR 경로 안내 동작 영상
+
+---
+
 ## Overview
 
 GPS가 작동하지 않는 실내 환경에서 카메라 영상만으로 위치를 인식하고, AR로 3D 경로를 그려 목적지까지 안내하는 내비게이션 앱입니다. Unity as a Library(UaaL) 아키텍처로 네이티브 앱(iOS/Android)에 임베드되는 형태로 동작합니다.
