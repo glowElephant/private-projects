@@ -10,5 +10,6 @@ Private 저장소 프로젝트들의 README 공개 모음입니다.
 | [Bom Factory](./bom-factory/) | 강아지 인터뷰 릴스 영상 자동 생성 파이프라인 — Gemini, Veo3 |
 | [currency-edge](./currency-edge/) | USD/KRW 환차익 자동매매 시스템 — 6슬롯 분산 매매, Claude AI 전략 최적화, 자동 복구, 중세 길드 대시보드 |
 | [graph-RAG-study](./graph-rag-study/) | GraphRAG 지식 그래프 시각화 + Agentic RAG 검색 엔진 — FAISS, NetworkX, MCP |
+| [fund-tracker](./fund-tracker/) | 커플/공금 자산 추적 대시보드, AI 챗봇 "봄이" — Node.js, Claude AI |
 
 > Bom Factory, graph-RAG-study는 GitHub Actions로 자동 동기화됩니다 (매주 월요일).
