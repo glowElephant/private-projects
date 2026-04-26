@@ -8,18 +8,30 @@ CCTV 영상 → Unity 3D 디지털 트윈. 사람 아바타 + 사물(헬멧·안
 
 ---
 
-## 스크린샷
+## 데모
 
 ### 오프라인 — GVHMR 단일 아바타
-![GVHMR Unity 아바타](assets/gvhmr-03.jpg)
+
+<video src="assets/gvhmr.mp4" poster="assets/gvhmr-03.jpg" controls width="100%"></video>
+
+[▶ 영상 다운로드](assets/gvhmr.mp4) · ![캡처](assets/gvhmr-03.jpg)
+
 > Unity 6 에디터 · CCTV 사무실 영상 → SMPL 24관절 → COCO17 리매핑 → Humanoid 본 회전. 본 위치 디버그 로그가 콘솔에 실시간 출력.
 
 ### 오프라인 — GVHMR + YOLO-World 사물 결합
-![GVHMR + YOLO 창고 5명](assets/gvhmr-yolo-03.jpg)
+
+<video src="assets/gvhmr-yolo.mp4" poster="assets/gvhmr-yolo-03.jpg" controls width="100%"></video>
+
+[▶ 영상 다운로드](assets/gvhmr-yolo.mp4) · ![캡처](assets/gvhmr-yolo-03.jpg)
+
 > 창고 CCTV에서 5명 풀바디 메시 + helmet/forklift 위치를 동시에 트윙. 같은 VideoPlayer.frame 동기화로 drift 0.
 
 ### 실시간 — RTMPose-L + YOLO 스트리밍
-![RTMPose 실시간 스켈레톤](assets/rtmpose-yolo-03.jpg)
+
+<video src="assets/rtmpose-yolo.mp4" poster="assets/rtmpose-yolo-03.jpg" controls width="100%"></video>
+
+[▶ 영상 다운로드](assets/rtmpose-yolo.mp4) · ![캡처](assets/rtmpose-yolo-03.jpg)
+
 > 같은 영상을 RTMPose-L 실시간 모드로 처리. 5명 ~50–60ms (목표 150ms 충족). 와이어프레임 색상은 트랙 ID별.
 
 ---

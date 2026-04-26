@@ -8,6 +8,18 @@
 
 ---
 
+## 데모
+
+### 디자인 데모 영상 (30초 발췌)
+
+<video src="assets/pathfinder-demo.mp4" poster="assets/pathfinder-02.jpg" controls width="100%"></video>
+
+[▶ 영상 다운로드](assets/pathfinder-demo.mp4)
+
+> 2D 도면 로드 → 분석 모드 전환 → 출발/도착 클릭 → 3D 트윙클 튜브 + 도착지 불 이펙트 + 카메라 플라이스루.
+
+---
+
 ## 스크린샷
 
 ### 2D + 3D 분할 뷰 (B2 도면 + 7층 분해도)
