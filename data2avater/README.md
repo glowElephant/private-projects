@@ -41,7 +41,7 @@ CCTV MP4 / RTSP
   │   COCO17 .bin / TCP                     ObjectPacket .bin / TCP
   │
   └─→ [Unity] PoseStreamSystem
-        ├─ PoseSourceSelector  ─ 드롭다운 (Local/9003/9004/9005/9006)
+        ├─ PoseSourceSelector  ─ 드롭다운 (로컬 재생 / 모델별 스트림 채널)
         ├─ LocalPosePlayer     ─ .bin 재생 + VideoPlayer 동기화
         ├─ TcpPoseReceiver     ─ TCP 실시간 수신
         ├─ HumanoidPoseDriver  ─ PointBoneAt 본 회전
@@ -50,14 +50,16 @@ CCTV MP4 / RTSP
 
 ## 4종 모델 동시 운용
 
-| Port | 서버 | 모델 | 5명 처리 | 품질 | 용도 |
-|------|------|------|---------|------|------|
-| 9003 | GVHMR 스트림 | GVHMR (HMR4D) | 오프라인 재생 | **최고** | DB 구축, 정밀 분석 |
-| 9004 | YOLO-Pose | yolov8x-pose | ~60–75ms | 낮음 (튐) | 초저지연 |
-| 9005 | ViTPose-H | ViTPose-H | ~197ms | 최고 | 고정밀 실시간 |
-| 9006 | **RTMPose-L** | RTMPose-L | **~50–60ms** | 높음 | **권장 균형점** |
+각 모델을 **별도 스트림 채널로 분리** → 비교/테스트가 쉽고 Unity에서 드롭다운으로 즉시 전환 가능.
 
-모든 서버가 **동일한 COCO17 바이너리 TCP 프로토콜**을 사용 → Unity는 포트만 바꿔 재연결, 코드 변경 0.
+| 모델 | 5명 처리 | 품질 | 용도 |
+|------|---------|------|------|
+| GVHMR (HMR4D, SMPL) | 오프라인 재생 | **최고** | DB 구축, 정밀 분석 |
+| YOLO-Pose | ~60–75ms | 낮음 (튐) | 초저지연 |
+| ViTPose-H | ~197ms | 최고 | 고정밀 실시간 |
+| **RTMPose-L** | **~50–60ms** | 높음 | **권장 균형점** |
+
+모든 채널이 **동일한 COCO17 바이너리 TCP 프로토콜**을 사용 → Unity는 채널만 바꿔 재연결, 코드 변경 0.
 
 ## 사물 감지 (Open-Vocabulary)
 
@@ -71,9 +73,9 @@ YOLO-World로 텍스트 프롬프트만으로 새 클래스 추가. 현재: `hel
 
 ## 기술 스택
 
-- **서버**: Python · Docker · RTX 5090 32GB
-- **포즈 모델**: GVHMR (HMR4D, SMPL) · ViTPose-H · RTMPose-L · YOLO11x-Pose
-- **사물 모델**: YOLO-World v2 (CLIP 기반 open-vocab) · ByteTrack
+- **서버**: Python · Docker (모델별 컨테이너 분리)
+- **포즈 모델**: GVHMR (HMR4D, SMPL) · ViTPose-H · RTMPose-L · YOLO-Pose
+- **사물 모델**: YOLO-World (CLIP 기반 open-vocab) · ByteTrack
 - **Unity**: 6.0 LTS · URP · Humanoid · Input System · Universal Animation Rigging
 - **프로토콜**: COCO17 바이너리 TCP, ObjectPacket 바이너리 TCP
 
@@ -113,23 +115,23 @@ Floor align               (전역 Y_min 1% → 0 이동)
 플레이 중 Inspector 드롭다운으로 즉시 전환:
 
 ```
-LocalBin           → LocalPosePlayer ON, TCP OFF
-GvhmrStream        → TCP port 9003
-RealtimeYoloPose   → TCP port 9004
-RealtimeViTPose    → TCP port 9005
-RealtimeRTMPose    → TCP port 9006
+LocalBin           → 로컬 .bin 재생, 스트림 OFF
+GvhmrStream        → GVHMR 오프라인 스트림 채널
+RealtimeYoloPose   → YOLO-Pose 실시간 채널
+RealtimeViTPose    → ViTPose 실시간 채널
+RealtimeRTMPose    → RTMPose 실시간 채널
 ```
 
 전환 시 기존 아바타 자동 제거 후 재생성. 트랙 재등장 시 Lerp 대신 즉시 스냅 (OnDisable → `_firstPoseApplied=false`).
 
 ## 검증 영상
 
-| 영상 | 해상도 | fps | 프레임 | 상태 |
-|------|--------|-----|--------|------|
-| cctv.mp4 | 1280×720 | 10 | 632 | 사람 검증 완료 |
-| Warehouse_Loading_Dock.mp4 | 1280×720 | 24 | 192 | 사람+사물 동시 |
-| Factory_Gate.mp4 | 1280×720 | 24 | 192 | 사물 검증 완료 |
-| sample2.mp4 | 1280×720 | 29.4 | 885 | 복합 회전 → 별도 캘리브레이션 필요 |
+| 영상 종류 | 해상도 | fps | 프레임 | 상태 |
+|-----------|--------|-----|--------|------|
+| 사무실 CCTV | 1280×720 | 10 | 632 | 사람 검증 완료 |
+| 창고 로딩 독 | 1280×720 | 24 | 192 | 사람+사물 동시 |
+| 공장 게이트 | 1280×720 | 24 | 192 | 사물 검증 완료 |
+| 복합 회전 카메라 샘플 | 1280×720 | 29.4 | 885 | 별도 캘리브레이션 필요 |
 
 ## 성능 지표
 
